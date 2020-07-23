@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccessLayer;
+using MessageService.Extensions;
+using MessageService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +36,8 @@ namespace MessageService
 
             services.AddCors();
 
+            services.AddWebSocketManager();
+            
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -49,6 +53,13 @@ namespace MessageService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseWebSockets();
+
+            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
+
+            app.MapWebSocketManager("/ws", serviceProvider.GetService<WebSocketService>());
 
             app.UseCors(builder =>
                 builder.AllowAnyOrigin()

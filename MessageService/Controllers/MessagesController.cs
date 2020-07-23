@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Contracts.Models;
 using DataAccessLayer;
 using MessageService.Models;
+using MessageService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace MessageService.Controllers
 {
@@ -12,10 +15,12 @@ namespace MessageService.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMessagesRepository _messagesRepository;
+        private readonly WebSocketService _webSocketService;
 
-        public MessagesController(IMessagesRepository messagesRepository)
+        public MessagesController(IMessagesRepository messagesRepository, WebSocketService webSocketService)
         {
             _messagesRepository = messagesRepository;
+            _webSocketService = webSocketService;
         }
 
         [HttpGet("from-{from}/to-{to}")]
@@ -25,7 +30,7 @@ namespace MessageService.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody]MessageContent messageModel)
+        public async Task<ActionResult> Post([FromBody]MessageContent messageModel)
         {
             if (!ModelState.IsValid)
             {
@@ -33,6 +38,11 @@ namespace MessageService.Controllers
             }
             var messageId = _messagesRepository.SaveMessage(messageModel.Text);
             var storedMessage = _messagesRepository.GetMessage(messageId);
+
+            var json = JsonConvert.SerializeObject(storedMessage);
+
+            await _webSocketService.SendMessageToAllAsync(json);
+            
             return Ok();
         }
     }

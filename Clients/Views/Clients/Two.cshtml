@@ -4,39 +4,56 @@
 }
 
 <h1>Сообщения в реальном времени</h1>
-<table id="message_list_socket"></table>
+<table id="message_list">
+    <thead>
+
+    <tr>
+        <td>Номер</td>
+        <td>Текст</td>
+        <td>Дата</td>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
 <script>
+
     $(document).ready(function () {
-
-        $("#message_request_static").on('click',
-            function () {
-
-                var socket = new WebSocket('ws://localhost:5000');
-
-                socket.onerror = function(error) {
-                    debug("connection error. ");
-                    socket.close();
-                };
-
-                socket.onopen = function() {
-                    debug("socket opened");
-                };
-
-                socket.onmessage = function(e) {
-                    debug("server answered: " + e.data);
-                    try {
-                        var data = JSON.parse(e.data);
-                        console.log(data);
-                    }
-                    catch(exc) {
-                        debug("bad server answer " + exc.name);
-                        debug(exc);
-                    }        
-                }
-
-                return socket;
-            })
+        openSocket();
     });
 
+
+    function openSocket() {
+        var socket = new WebSocket('ws://localhost:5000/ws');
+
+        socket.onerror = function (error) {
+            console.log("connection error. ");
+            socket.close();
+        };
+
+        socket.onopen = function () {
+            console.log("socket opened");
+        };
+
+        socket.onmessage = function (e) {
+
+            console.log("server answered: " + e.data);
+            try {
+                var data = JSON.parse(e.data);
+                console.log(data);
+                $('#message_list > tbody:last-child').append('<tr><td>' +
+                    data.Number +
+                    '</td><td>' +
+                    data.Text +
+                    '</td><td>' +
+                    data.Date +
+                    '</td></tr>');
+            }
+            catch (exc) {
+                console.error("bad server answer " + exc.name);
+            }
+        }
+
+        return socket;
+    }
 </script>
