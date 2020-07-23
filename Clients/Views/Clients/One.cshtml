@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "One";
+}
+
+    <h1>Отправка сообщения</h1>
+
+    <div>
+        <input type="text" id="message_text" maxlength="128">
+        <input type="button" id="message_send" value="Отправить">
+        <div class=error />
+    </div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $("#message_send").on('click',
+            function() {
+                var text = $('#message_text').val();
+                var textObject = { text };
+                var json = JSON.stringify(textObject);
+                console.log(json);
+                if (text) {
+
+                    $.ajax({
+                        url: 'http://localhost:5000/api/Messages',
+                        method: 'post',
+                        contentType: 'application/json',
+                        data: json,
+                        success: function(data) {
+                            $('<div class=messages/>')
+                                .text("Сообщение отправлено: " + text)
+                                .insertAfter('h1');
+                        },
+                        error: function (jqxhr, status, errorMsg) {
+                            $('<div class=error/>')
+                                .text("Статус: " + status + " Ошибка: " + errorMsg)
+                                .insertAfter('h1');
+                        }
+                    });
+
+                } else {
+                    alert("Текст не введен");
+                }
+            })
+    });
+
+
+</script>

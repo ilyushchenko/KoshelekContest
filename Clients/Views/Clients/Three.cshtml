@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewData["Title"] = "Three";
+}
+
+    <h1>Сообщения за последние 10 минут</h1>
+
+<div>
+    <button>Получить сообщения</button>
+    <input type="button" id="message_request_static" value="Получить">
+    <table id="message_list">
+        <thead>
+
+        <tr>
+            <td>Номер</td>
+            <td>Текст</td>
+            <td>Дата</td>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+
+    var MS_PER_MINUTE = 60000;
+    var timeInMinutes = 10;
+
+    $(document).ready(function() {
+
+        $("#message_request_static").on('click',
+            function() {
+
+                var currentTime = new Date();
+                var fromTime = new Date(currentTime - timeInMinutes * MS_PER_MINUTE);
+                var url = "http://localhost:5000/api/Messages/from-" +
+                    fromTime.toISOString() +
+                    "/to-" +
+                    currentTime.toISOString();
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        $('#message_list tbody').empty();
+
+                        data.map(item => {
+                            console.log(item);
+                            $('#message_list > tbody:last-child').append('<tr><td>' +
+                                item.number +
+                                '</td><td>' +
+                                item.text +
+                                '</td><td>' +
+                                item.date +
+                                '</td></tr>');
+                        });
+                        console.log(data);
+                        $('<div class=messages/>')
+                            .text("Сообщение отправлено: " + text)
+                            .insertAfter('h1');
+                    },
+                    error: function(jqxhr, status, errorMsg) {
+                        $('<div class=error/>')
+                            .text("Статус: " + status + " Ошибка: " + errorMsg)
+                            .insertAfter('h1');
+                    }
+                });
+            })
+    });
+</script>

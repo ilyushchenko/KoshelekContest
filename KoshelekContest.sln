@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService", "MessageService\MessageService.csproj", "{7A643401-474B-4DC7-B570-853241F1E209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageService", "MessageService\MessageService.csproj", "{7A643401-474B-4DC7-B570-853241F1E209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{E1C2E202-9C6D-49A6-88FE-CA2935B84219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{E1C2E202-9C6D-49A6-88FE-CA2935B84219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{1D09EC8E-D608-40B2-9797-F27941EB5A16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{1D09EC8E-D608-40B2-9797-F27941EB5A16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clients", "Clients\Clients.csproj", "{E8C44D60-0839-490A-9053-B323B1660669}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{1D09EC8E-D608-40B2-9797-F27941EB5A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D09EC8E-D608-40B2-9797-F27941EB5A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D09EC8E-D608-40B2-9797-F27941EB5A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C44D60-0839-490A-9053-B323B1660669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C44D60-0839-490A-9053-B323B1660669}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C44D60-0839-490A-9053-B323B1660669}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C44D60-0839-490A-9053-B323B1660669}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

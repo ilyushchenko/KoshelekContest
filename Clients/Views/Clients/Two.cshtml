@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "Two";
+}
+
+<h1>Сообщения в реальном времени</h1>
+<table id="message_list_socket"></table>
+
+<script>
+    $(document).ready(function () {
+
+        $("#message_request_static").on('click',
+            function () {
+
+                var socket = new WebSocket('ws://localhost:5000');
+
+                socket.onerror = function(error) {
+                    debug("connection error. ");
+                    socket.close();
+                };
+
+                socket.onopen = function() {
+                    debug("socket opened");
+                };
+
+                socket.onmessage = function(e) {
+                    debug("server answered: " + e.data);
+                    try {
+                        var data = JSON.parse(e.data);
+                        console.log(data);
+                    }
+                    catch(exc) {
+                        debug("bad server answer " + exc.name);
+                        debug(exc);
+                    }        
+                }
+
+                return socket;
+            })
+    });
+
+</script>
