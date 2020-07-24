@@ -1,0 +1,44 @@
+version: '3.4'
+
+networks:
+  dockerapi-dev:
+    driver: bridge
+
+services:
+  message_service:
+    image: ilyushchenko/message_service:beta
+    depends_on:
+      - "postgres_db"
+    ports:
+      - "5000:80"
+    environment:
+      DbConnection: "Host=postgres_db;Username=devuser;Password=devuserpass;Database=testdb"
+    networks:
+      - dockerapi-dev
+    
+  postgres_db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "devuser"
+      POSTGRES_PASSWORD: "devuserpass"
+      POSTGRES_DB: "testdb"
+    networks:
+      - dockerapi-dev
+    
+  clients_service:
+    image: clients_service:beta
+    depends_on:
+      - "message_service"
+    ports:
+      - "5001:80"
+    networks:
+      - dockerapi-dev
+ 
+volumes:
+  db_volume:
+    driver: local

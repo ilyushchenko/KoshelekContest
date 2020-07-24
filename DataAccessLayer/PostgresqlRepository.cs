@@ -75,6 +75,22 @@ namespace DataAccessLayer
             return messages;
         }
 
+        public void Init()
+        {
+            var sqlText = @"CREATE EXTENSION IF NOT EXISTS ""uuid-ossp"";" +
+                          "CREATE TABLE IF NOT EXISTS messages (" +
+                          "id uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL," +
+                          "number serial NOT NULL," +
+                          "text character varying(128) NOT NULL," +
+                          "date timestamp without time zone DEFAULT now() NOT NULL);";
+
+            using (var initCommand = new NpgsqlCommand(sqlText, _connection))
+            {
+                initCommand.ExecuteNonQuery();
+            }
+
+        }
+
         public void Dispose()
         {
             _connection?.Close();

@@ -32,7 +32,9 @@ namespace MessageService
 
             var connectionString = Configuration.GetSection("DbConnection").Value;
 
-            services.AddSingleton<IMessagesRepository>(new PostgresqlRepository(connectionString));
+            var repository = new PostgresqlRepository(connectionString);
+            repository.Init();
+            services.AddSingleton<IMessagesRepository>(repository);
 
             services.AddCors();
 
